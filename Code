@@ -1,0 +1,43 @@
+﻿#Code used for plotting different types of chart
+
+Bar plots
+sort.data <- data[order(data$Poverty.),]
+barplot(sort.data$Poverty.,names.arg=sort.data$District,las=2)
+library("RColorBrewer")
+barplot(sort.data$Poverty.,names.arg=sort.data$District,las=2,col = brewer.pal(3,"Set1"))
+barplot(sort.data$Poverty.,names.arg=sort.data$District,las=2,col=brewer.pal(3,"Set1"),main="District Wise Poverty%",ylab="Poverty%")
+
+Stacked Bar plot
+data <- read.csv("~/Downloads/literacy rate.csv")
+data.lit <- data[,c(2,4,6,8)]
+sort.data <- data.lit[order(data.lit$Total_2011),]
+mat <- data.matrix(sort.data)
+mat <- t(mat)
+mat <- mat[2:4,]
+colnames(mat) <- sort.data$District
+rownames(mat)<- c("Total Literacy Rate","Male Literacy Rate","Female Literacy Rate")
+barplot(mat, col=heat.colors(length(rownames(mat))), width=2,las=2)
+legend("topleft",cex=0.75, fill=heat.colors(length(rownames(mat))), legend=rownames(mat))
+
+
+Beside Bar Plot
+voter <- read.csv("~/Downloads/voter%.csv") 
+voter1 <- voter[,c(2,3,4)]
+sort.voter <- voter1[order(voter1$Male_2005),]
+mat <- data.matrix(sort.voter)
+mat <- t(mat)
+mat <- mat[2:3,]
+colnames(mat) <- sort.voter$Name.of.District
+rownames(mat) <- c("Male","Female")
+barplot(mat,beside=T,names.arg=sort.voter$Name.of.District,main="Voter% Comaprison between Male & Female in Assembely Election 2005",las=2,ylab="Voter%",col=c("green","black"))
+legend("topleft",c("Male","Female"),lty=c(1,1),col=c("green","black"),cex=0.75,inset=0)
+
+Dot chart
+data <- read.csv("~/Downloads/Hospitals.csv")
+sort.data <- data[order(data$Total_2011),]
+rownames(sort.data) <- sort.data$Name.of.the.Districts
+sort.data$color[sort.data$Total_2011<=10] <-"red"
+sort.data$color[sort.data$Total_2011 >= 30] <-"green"
+sort.data$color[4:31] <-"blue"
+dotchart(sort.data$Total_2011,labels=row.names(sort.data),cex=0.7,main="Total Hospitals in 2011",xlab="No. of Hospitals",color=sort.data$color)
+
